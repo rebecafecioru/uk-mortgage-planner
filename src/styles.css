@@ -1,0 +1,156 @@
+:root {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --text: #1b1f24;
+  --muted: #59636e;
+  --border: #d5dbe1;
+  --accent: #1f6feb;
+  --accent-2: #d1590f;
+  --good-bg: #e7f5ec;
+  --good-text: #0f5c2e;
+  --error: #c62828;
+  --radius: 10px;
+  color-scheme: light;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.5;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1216;
+    --surface: #171b21;
+    --text: #e6e9ed;
+    --muted: #9aa4ae;
+    --border: #2c333b;
+    --accent: #5b9cff;
+    --accent-2: #f0883e;
+    --good-bg: #13301f;
+    --good-text: #8fdcaa;
+    --error: #ff7b72;
+    color-scheme: dark;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}
+
+.page__header h1 { margin: 0 0 4px; font-size: 1.8rem; }
+.page__header p { margin: 0 0 24px; color: var(--muted); }
+
+/* minmax(0, 1fr) and min-width: 0 let columns shrink below their widest
+   content (the year table), so nothing pushes the page wider than the screen. */
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
+}
+.layout > * { min-width: 0; }
+
+@media (min-width: 900px) {
+  .layout { grid-template-columns: 320px minmax(0, 1fr); align-items: start; }
+}
+
+.panel, .results {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+
+/* Form fields */
+.field { margin-bottom: 16px; }
+.field label { display: block; font-weight: 600; margin-bottom: 4px; }
+.field__control {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+}
+.field__control:focus-within { outline: 2px solid var(--accent); outline-offset: 1px; }
+.field--error .field__control { border-color: var(--error); }
+.field__affix { padding: 0 10px; color: var(--muted); white-space: nowrap; }
+.field input {
+  flex: 1;
+  min-width: 0;
+  padding: 10px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+.field input:focus { outline: none; }
+.field__hint, .field__error { margin: 4px 0 0; font-size: 0.85rem; }
+.field__hint { color: var(--muted); }
+.field__error { color: var(--error); }
+
+/* Results */
+.results h2 { font-size: 1.1rem; margin: 24px 0 8px; }
+.results__empty { color: var(--muted); margin: 0; }
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+}
+.stat p { margin: 0; }
+.stat__label { color: var(--muted); font-size: 0.9rem; }
+.stat__value { font-size: 1.6rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.stat__note { color: var(--muted); font-size: 0.85rem; }
+
+.saving {
+  margin: 20px 0 0;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: var(--good-bg);
+  color: var(--good-text);
+}
+
+/* Chart */
+.chart { margin: 0; }
+.chart svg { width: 100%; height: auto; display: block; }
+.chart__grid { stroke: var(--border); stroke-width: 1; }
+/* SVG text scales with the chart, so it is sized for the 640-wide viewBox and
+   enlarged on small screens, where the chart is drawn at about half size. */
+.chart__label { fill: var(--muted); font-size: 13px; }
+@media (max-width: 600px) { .chart__label { font-size: 22px; } }
+.chart__line { fill: none; stroke-width: 3; stroke-linejoin: round; }
+.chart__line--standard { stroke: var(--accent); }
+.chart__line--over { stroke: var(--accent-2); stroke-dasharray: 7 5; }
+.chart__legend { display: flex; gap: 20px; flex-wrap: wrap; font-size: 0.9rem; color: var(--muted); }
+.legend::before {
+  content: '';
+  display: inline-block;
+  width: 18px;
+  height: 3px;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+.legend--standard::before { background: var(--accent); }
+.legend--over::before { background: var(--accent-2); }
+
+/* Year table */
+.year-table { margin-top: 20px; }
+.year-table summary { cursor: pointer; font-weight: 600; }
+.year-table__scroll { overflow-x: auto; margin-top: 8px; }
+.year-table table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.year-table th, .year-table td {
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border);
+  text-align: right;
+  white-space: nowrap;
+}
+.year-table th[scope='col']:first-child, .year-table th[scope='row'] { text-align: left; }
+
+.page__footer { margin-top: 24px; color: var(--muted); font-size: 0.85rem; }
